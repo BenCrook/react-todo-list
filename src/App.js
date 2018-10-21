@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import cloneDeep from 'lodash.clonedeep';
 
 import './normalize.css';
 import './App.css';
@@ -14,78 +13,62 @@ class App extends Component {
         this.toggleCheckedStatus = this.toggleCheckedStatus.bind(this);
 
         this.state = {
-            todos: [
-                {
-                    name: 'Ben\'s To Do List',
-                    id: 'bens-list',
-                    tasks: [
-                        {
-                            checked: false,
-                            completed: false,
-                            id: 1,
-                            name: 'First Example Task'
-                        },
-                        {
-                            checked: true,
-                            completed: false,
-                            id: 2,
-                            name: 'Second Example Task'
-                        },
-                        {
-                            checked: false,
-                            completed: true,
-                            id: 3,
-                            name: 'A Completed Task'
-                        }
-                    ]
+            tasks: {
+                1: {
+                    checked: false,
+                    completed: false,
+                    name: 'First Example Task',
+                    id: 1847369
                 },
-                {
-                    name: 'A Different Task List',
-                    id: 'second-task-list',
-                    tasks: [
-                        {
-                            checked: false,
-                            completed: false,
-                            id: 4,
-                            name: 'Single Task'
-                        }
-                    ]
+                2: {
+                    checked: true,
+                    completed: false,
+                    name: 'Second Example Task',
+                    id: 7305738
+                },
+                3: {
+                    checked: false,
+                    completed: true,
+                    name: 'A Completed Task',
+                    id: 1109343
+                },
+                4: {
+                    checked: false,
+                    completed: false,
+                    name: 'Generic Task',
+                    id: 9376680
                 }
-            ]
+            }
         }
     }
 
     /**
-     * Delete a task
-     * @param {string} taskListId - Task list ID
-     * @param {Number} taskId - The task ID
+     * Delete the requested task
+     * @param {Number} taskObjectKey - The key referring to the task to delete
      */
-    deleteTask(taskListId, taskId) {
-        // Deep clone todos to avoiding directly mutating state
-        const todos = cloneDeep(this.state.todos);
-
-        // Filter out the task that should be removed
-        const updatedTodos = todos.map((loopedTaskList) => {
-            if (loopedTaskList.id === taskListId) {
-                loopedTaskList.tasks = loopedTaskList.tasks.filter((loopedTask) => loopedTask.id !== taskId);
-            }
-            return loopedTaskList;
-        });
-
+    deleteTask(taskObjectKey) {
+        const updatedTasks = {...this.state.tasks};
+        delete updatedTasks[taskObjectKey];
         this.setState({
-            todos: updatedTodos
-        });
+            tasks: updatedTasks
+        })
     }
 
-    toggleCheckedStatus(tasklistId, taskId) {
-        //todo: implement checked functionality
+    toggleCheckedStatus(taskObjectKey) {
         console.log('CHECKED - TODO');
+
+        const updatedTasks = {...this.state.tasks};
+        updatedTasks[taskObjectKey].checked = !updatedTasks[taskObjectKey].checked;
+
+        this.setState({
+            tasks: updatedTasks
+        })
     }
 
     render() {
         return (
             <div className="container">
-                <Todo data={this.state.todos} delete={this.deleteTask} checkboxChange={this.toggleCheckedStatus} />
+                <Todo tasks={this.state.tasks} delete={this.deleteTask} checkboxChange={this.toggleCheckedStatus} />
                 <ul>
                     <li>Container: To-do list</li>
                     <li>Component: To-do entry</li>
