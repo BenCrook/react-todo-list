@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { CSSTransitionGroup } from 'react-transition-group'
 import styles from './todo.module.css';
 
 /**
@@ -19,17 +20,16 @@ class Todo extends Component {
     renderTasks() {
         const tasks = this.props.tasks;
 
-        return Object.keys(tasks).map((loopedTaskObjectKey) => {
-
-            const task = tasks[loopedTaskObjectKey];
+        return tasks.map((task) => {
             const completedClass = task.completed ? styles.isCompleted : '';
+            const taskId = task.id;
 
             return (
-                <div className={`${styles.task} ${completedClass}`} key={task.id}>
-                    <label className={styles.hiddenLabel} htmlFor={task.id} />
-                    <div className={styles.checkbox}><input id={task.id} type="checkbox" onChange={() => this.props.checkboxChange(loopedTaskObjectKey)} checked={task.checked} /></div>
+                <div className={`${styles.task} ${completedClass}`} key={taskId}>
+                    <label className={styles.hiddenLabel} htmlFor={taskId} />
+                    <div className={styles.checkbox}><input id={taskId} type="checkbox" onChange={() => this.props.checkboxChange()} checked={task.checked} /></div>
                     <div className={styles.name}>{task.name}</div>
-                    <div className={styles.delete} onClick={() => this.props.delete(loopedTaskObjectKey)}>X</div>
+                    <div className={styles.delete} onClick={() => this.props.delete(taskId)}>X</div>
                 </div>
             )
         });
@@ -38,7 +38,12 @@ class Todo extends Component {
     render() {
         return (
             <div>
-                {this.renderTasks()}
+                <CSSTransitionGroup
+                    transitionName="slide"
+                    transitionEnterTimeout={300}
+                    transitionLeaveTimeout={300}>
+                    {this.renderTasks()}
+                </CSSTransitionGroup>
             </div>
         )
     }
@@ -48,7 +53,7 @@ class Todo extends Component {
  * Define prop types
  */
 Todo.propTypes = {
-    tasks: PropTypes.object.isRequired
+    tasks: PropTypes.array.isRequired
 };
 
 

@@ -10,55 +10,79 @@ class App extends Component {
         super();
 
         this.deleteTask = this.deleteTask.bind(this);
+        this.getTaskIndex = this.getTaskIndex.bind(this);
         this.toggleCheckedStatus = this.toggleCheckedStatus.bind(this);
 
         this.state = {
-            tasks: {
-                1: {
+            tasks: [
+                {
                     checked: false,
                     completed: false,
                     name: 'First Example Task',
                     id: 1847369
                 },
-                2: {
+                {
                     checked: true,
                     completed: false,
                     name: 'Second Example Task',
                     id: 7305738
                 },
-                3: {
+                {
                     checked: false,
                     completed: true,
                     name: 'A Completed Task',
                     id: 1109343
                 },
-                4: {
+                {
                     checked: false,
                     completed: false,
                     name: 'Generic Task',
                     id: 9376680
                 }
-            }
+            ]
         }
     }
 
     /**
      * Delete the requested task
-     * @param {Number} taskObjectKey - The key referring to the task to delete
+     * @param {Number} taskId - ID number of the task
      */
-    deleteTask(taskObjectKey) {
-        const updatedTasks = {...this.state.tasks};
-        delete updatedTasks[taskObjectKey];
+    deleteTask(taskId) {
+        const updatedTasks = [...this.state.tasks];
+
+        updatedTasks.splice(this.getTaskIndex('id', taskId), 1);
+
         this.setState({
             tasks: updatedTasks
-        })
+        });
     }
 
-    toggleCheckedStatus(taskObjectKey) {
-        console.log('CHECKED - TODO');
+    /**
+     * Returns the index of the task with the id matching taskId.
+     * @returns {number} - The index of the provided task
+     */
+    getTaskIndex(key, value) {
+        if (key === 'id' && isNaN(value)) {
+            throw Error(`number expected but ${typeof value} given`);
+        }
 
-        const updatedTasks = {...this.state.tasks};
-        updatedTasks[taskObjectKey].checked = !updatedTasks[taskObjectKey].checked;
+        const tasks = this.state.tasks;
+
+        for(let i = 0; i < tasks.length; i++) {
+            console.log(tasks[i][key], value);
+            if (tasks[i][key] === value) {
+                console.log('Matching');
+                return i;
+            }
+        }
+
+        throw Error(`Task ID ${value} not found`);
+    }
+
+    toggleCheckedStatus(taskId) {
+        const updatedTasks = [...this.state.tasks];
+
+        // todo: Toggle checked status
 
         this.setState({
             tasks: updatedTasks

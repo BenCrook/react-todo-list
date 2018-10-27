@@ -26,3 +26,16 @@ h3 {
     padding: 5px;
     text-transform: uppercase;
 }
+
+.slide-enter,
+.slide-leave {
+    transition: opacity 0.3s ease;
+}
+
+.slide-enter {
+    opacity: 1;
+}
+
+.slide-leave {
+    opacity: 0;
+}
