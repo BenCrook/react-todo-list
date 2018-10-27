@@ -27,9 +27,14 @@ class Todo extends Component {
             return (
                 <div className={`${styles.task} ${completedClass}`} key={taskId}>
                     <label className={styles.hiddenLabel} htmlFor={taskId} />
-                    <div className={styles.checkbox}><input id={taskId} type="checkbox" onChange={() => this.props.checkboxChange()} checked={task.checked} /></div>
+                    <div className={styles.checkbox}>
+                        <input id={taskId}
+                               type="checkbox"
+                               onChange={() => this.props.checkboxChange(taskId)}
+                               checked={task.checked} />
+                    </div>
                     <div className={styles.name}>{task.name}</div>
-                    <div className={styles.delete} onClick={() => this.props.delete(taskId)}>X</div>
+                    <div className={styles.delete} onClick={() => this.props.deleteSingleTask(taskId)}>X</div>
                 </div>
             )
         });
@@ -44,6 +49,8 @@ class Todo extends Component {
                     transitionLeaveTimeout={300}>
                     {this.renderTasks()}
                 </CSSTransitionGroup>
+
+                <button onClick={this.props.deleteCheckedTasks}>Remove</button>
             </div>
         )
     }
