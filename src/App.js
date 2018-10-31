@@ -48,25 +48,30 @@ class App extends Component {
     /**
      * Delete a singular task
      * @param {Number} taskId - ID number of the task
+     * todo: Improve confirmation messaging and use a modal not window.confirm
      */
     deleteSingleTask(taskId) {
-        this.setState((state) => {
-            return {
-                tasks: state.tasks.filter((loopedTask) => loopedTask.id !== taskId)
-            }
-        })
+        if (window.confirm('Are you sure you sure?')) {
+            this.setState((state) => {
+                return {
+                    tasks: state.tasks.filter((loopedTask) => loopedTask.id !== taskId)
+                }
+            })
+        }
     }
 
     /**
      * Deletes all tasks that are checked
-     * todo: Add confirmation prompt
+     * todo: Improve confirmation messaging and use a modal not window.confirm
      */
     deleteCheckedTasks() {
-        this.setState((state) => {
-            return {
-                tasks: state.tasks.filter((loopedTask) => !loopedTask.checked)
-            }
-        });
+        if (window.confirm('Are you sure you sure?')) {
+            this.setState((state) => {
+                return {
+                    tasks: state.tasks.filter((loopedTask) => !loopedTask.checked)
+                }
+            });
+        }
     }
 
     /**
